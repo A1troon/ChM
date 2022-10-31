@@ -38,7 +38,7 @@ function [x1,niter,r] = Relax(a,b,c,f,omega,tol,x1,maxiter)
             x1(i)=(1-omega)*x0(i)+omega*(f(i)/A(i,i)-sum1-sum2);
         end
         r(niter)=norm(A*x1-f,inf); 
-        if norm(x1-x0,inf)<=tol
+        if r(niter)<=tol
             break;
         end
         if niter==maxiter

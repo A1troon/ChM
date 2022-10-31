@@ -29,7 +29,10 @@ function [x1,niter,r] = Jacobi(a,b,c,f,tol,x1,maxiter)
     A=diag(b)+diag(c,1)+diag(a,-1);
     %x0-будет x_k, x1-будет x_k+1 
     niter=1;
-    while	niter<=maxiter niter=niter+1; x0=x1; x1=zeros(n,1);
+    while	niter<=maxiter 
+        niter=niter+1; 
+        x0=x1; 
+        x1=zeros(n,1);
         for i=1:n
             sum1=0; sum2=0;
             for j=1:i-1
@@ -38,8 +41,8 @@ function [x1,niter,r] = Jacobi(a,b,c,f,tol,x1,maxiter)
             for j=i+1:n
                 sum2=sum2+A(i,j)/A(i,i)*x0(j);
             end
+            x1(i)=f(i)/A(i,i)-sum1-sum2;
         end
-        x1(i)=f(i)/A(i,i)-sum1-sum2;
         r(niter)=norm(A*x1-f,inf); 
         if norm(x1-x0,inf)<=tol
             break;

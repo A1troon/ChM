@@ -37,10 +37,10 @@ function [x1,niter,r] = Seidel(a,b,c,f,tol,x1,maxiter)
             x1(i)=f(i)/A(i,i)-sum1-sum2;
         end
         r(niter)=norm(A*x1-f,inf); 
-        %if norm(x1-x0) / norm(x1) * 100<=tol
-        %    break
-        if r(niter)<=tol
-            break;
+        if norm(x1-x0) / norm(x1) * 100<=tol
+            break
+        %if r(niter)<=tol
+        %    break;
         end
         if niter==maxiter
             fprintf('Достигнуто максимальное количество иттераций %d',maxiter)

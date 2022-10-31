@@ -38,7 +38,7 @@ plot(log(H),log(errProgonka));
 xlabel('ln(h)');
 ylabel('ln(||u - yh||/h^2)');
 %-------------------------
-n = 10;
+n = 100;
 h = 1/n;
 eps = h *h ;
 [ah, bh, ch, fh, grid] = BuildSystem(n,u,p,g,pp,up,upp,f);
@@ -50,22 +50,16 @@ errRelax = [];
 fprintf('%-15s%-15s%-15s\n','t(h(n)=500)','k(кол-во итер)','||u - yh||');
 W = linspace(0,1,15);
 for w = W
-    [y3,niter,r] = Relax(ah,bh,ch,fh,w,h*h,[],10000);
+    [y3,niter,r] = Relax(ah,bh,ch,fh,w,10e-6,[],10000);
     err3 = norm(y3-u(grid),"inf");
     fprintf('%-15d%-15d%-15d\n',w,niter,err3);
     kIter = [kIter niter];
     errRelax = [errRelax err3];
 end
-%-------------------
 [y5] = Gauss_Seidel_Funct(A, fh, 10e-6);
 err5 = norm(y5-u(grid),"inf");
-[y4,niter,r] = Seidel(ah,bh,ch,fh,h*h*h,[],10000);
+[y4,niter,r] = Seidel(ah,bh,ch,fh,10e-6,[],10000);
 err4 = norm(y4-u(grid),"inf");
-y1 = A\fh;
-err1 = norm(y1-u(grid),"inf");
-[y7,niter,r] = Relax(ah,bh,ch,fh,0.07,h*h*h,[],10000);
-err7 = norm(y7-u(grid),"inf");
-%--------------
 figure
 tiledlayout(2,1)
 nexttile
@@ -88,10 +82,10 @@ for n = 70:62:1000
     ah = [0, ah']';
     ch = [ch', 0]';
     tic
-    [y3,niter,r] = Seidel(ah,bh,ch,fh,h*h,[],1000000);
+    [y3,niter,r] = Relax(ah,bh,ch,fh,0.07,10e-6,[],10000);
     time = toc;
     err3 = norm(y3-u(grid),"inf");
-    fprintf('%-15d%-15d%-15d%-15d%-15d%-15d\n',n,h*h,niter,err3,err3*n*n,time);
+    fprintf('%-15d%-15d%-15d%-15d%-15d%-15d\n',n,h,niter,err3,err3*n*n,time);
     H = [H h];
     errRelax = [errRelax err2*n*n];
 end
